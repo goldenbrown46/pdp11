@@ -1,4 +1,4 @@
-#include "type.h"
+#include "lib.h"
 
 void b_write (Adress adr, byte b) {
 // пишем байт b по адресу adr

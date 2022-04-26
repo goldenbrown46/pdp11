@@ -12,3 +12,4 @@ void w_write (Adress adr, word w);
 word w_read (Adress adr);
 
 void load_file(const char * file_name);
+void mem_dump(Adress start, word n);

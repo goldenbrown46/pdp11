@@ -14,3 +14,10 @@ void load_file(const char * file_name) {
     }
     fclose(f);
 }
+
+void mem_dump(Adress start, word n) {
+    unsigned int i;
+    for (i = 0; i < n; i += 2) {
+        printf("%06o : %06o\n", ((Adress)(start + i)), w_read((Adress)(start + i)));
+    }
+}

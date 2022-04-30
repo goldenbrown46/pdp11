@@ -1,5 +1,15 @@
 #include "lib.h"
 
+byte mem[64*1024];
+word reg[8];
+
+void reg_dump()
+{
+    for(int i = 0; i < 8; i++)
+        printf("r%i:%o ", i, reg[i]);
+    printf("\n");
+}
+
 void b_write (Adress adr, byte b) {
 // пишем байт b по адресу adr
     mem[adr] = b;

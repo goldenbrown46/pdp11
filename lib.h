@@ -1,12 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef unsigned char byte ; // 8 bit
 typedef unsigned short int word ; // 16 bit
 typedef word Adress ; // 64 Kb
 
-byte mem[64*1024];
-word reg[8];
-word pc = reg[7];
+extern byte mem[64*1024];
+extern word reg[8];
+
+#define pc reg[7]
 
 void b_write (Adress adr, byte b);
 byte b_read (Adress adr);
@@ -15,14 +17,18 @@ word w_read (Adress adr);
 
 void load_file(const char * file_name);
 void mem_dump(Adress start, word n);
+void reg_dump();
 
 struct Argument {
     word val;
     word adr;
-} ss, dd;
+};
+extern struct Argument ss, dd;
 
-word w = 0;
-word NN = 0;
+extern word w;
+extern word NN;
+
+void run();
 
 void halt();
 void add();

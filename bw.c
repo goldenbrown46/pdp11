@@ -20,8 +20,12 @@ byte b_read (Adress adr) {
 }
 void w_write (Adress adr, word w) {
 //пишем слово w по адресу adr
-    mem[adr] = (byte)(w);
-    mem[adr + 1] = (byte)(w >> 8);
+    if (adr < 8) {
+        reg[adr] = w;
+    } else {
+        mem[adr] = (byte)(w);
+        mem[adr + 1] = (byte)(w >> 8);
+    }
 }
 word w_read (Adress adr) {
 // читаем слово по адресу adr

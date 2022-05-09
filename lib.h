@@ -6,16 +6,17 @@ typedef unsigned char byte ; // 8 bit
 typedef unsigned short int word ; // 16 bit
 typedef word Adress ; // 64 Kb
 
-extern byte mem[64*1024];
-extern word reg[8];
-extern int N, R;
+extern byte mem[];
+extern word reg[];
 extern word w;
+extern word r;
+extern word NN;
 
 #define NO_PARAMS 0
 #define HAS_DD 1
 #define HAS_SS (1<<1)
-#define HAS_N (1<<2)
-#define HAS_R (1<<3)
+#define HAS_R (1<<2)
+#define HAS_N (1<<3)
 #define HAS_XX (1<<4)
 #define HAS_R6 (1<<5)
 
@@ -34,10 +35,8 @@ struct Argument {
     word val;
     word adr;
 };
-extern struct Argument ss, dd;
 
-extern word w;
-extern word NN;
+extern struct Argument ss, dd;
 extern struct Argument flag;
 
 struct Argument get_mode(word w);
@@ -49,7 +48,9 @@ void add();
 void mov();
 void movb();
 void sob();
+void clr();
 void do_unknown();
+
 
 struct Command
 {
@@ -60,4 +61,4 @@ struct Command
     char params;
 };
 
-extern struct Command command_list[];
+extern struct Command cmd[];

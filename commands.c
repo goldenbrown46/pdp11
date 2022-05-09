@@ -1,8 +1,9 @@
 #include "lib.h"
 
-word w = 0;
-word NN = 0;
-int N, R;
+struct Argument  ss, dd;
+word w;
+word NN;
+word r;
 
 void halt() {
     printf("\n");
@@ -23,11 +24,15 @@ void movb() {
 }
 
 void sob() {
-    reg[w] = reg[w] - 1;
-    if (reg[w] != 0) {
+    reg[r] = reg[r] - 1;
+    if (reg[r] != 0) {
         pc = pc - (2 * NN);
     }
-    printf("%06o ", pc);
+    //printf("%06o ", pc);
+}
+
+void clr() {
+    w_write(dd.adr, 0);
 }
 
 void do_unknown() {
@@ -35,12 +40,13 @@ void do_unknown() {
     reg_dump();
 }
 
-struct Command command_list[] = {
+struct Command cmd[] = {
     {0177777, 0000000, "HALT", halt, NO_PARAMS},
     {0170000, 0010000, "MOV", mov, HAS_SS | HAS_DD},
     {0170000, 0110000, "MOVB", movb, HAS_SS | HAS_DD},
     {0170000, 0060000, "ADD", add, HAS_SS | HAS_DD},
     {0177000, 0077000, "SOB", sob, HAS_R | HAS_N},
+    {0177700, 0005000, "CLR", clr, HAS_DD},
     {0170000, 0000000, "UNKNOWN", do_unknown, NO_PARAMS}
 };
 
@@ -51,25 +57,24 @@ void run()
         w = w_read(pc);
         printf("%06o : %06o ", pc, w);
         pc += 2;
-        for(int j = 0; ; j++) {
-            if ((w & command_list[j].mask) == command_list[j].opcode) {
-                printf("%s ", command_list[j].name);
-                if (command_list[j].params & HAS_N) {
-                    N = (w >> 6) & 7;
-                    printf("R%o ", N);
+        for(size_t j = 0; j < sizeof(cmd)/sizeof(cmd[0]); j++) {
+            if ((w & cmd[j].mask) == cmd[j].opcode) {
+                printf("%s ", cmd[j].name);
+                if (cmd[j].params & HAS_R) {
+                    r = (w >> 6) & 7;
+                    printf("R%o ", r);
                 }
-                if (command_list[j].params & HAS_SS) {
+                if (cmd[j].params & HAS_SS) {
                     ss = get_mode(w >> 6);
                 }
-                if (command_list[j].params & HAS_DD) {
+                if (cmd[j].params & HAS_DD) {
                     dd = get_mode(w);
                 }
-                if (command_list[j].params & HAS_R) {
-                    R = (w & 077);
-                    printf("%06o", pc - 2 * R);
+                if (cmd[j].params & HAS_N) {
+                    NN = (w & 077);
+                    printf("%06o", pc - 2 * NN);
                 }
-                command_list[j].do_command();
-                break;
+                cmd[j].do_command();
             }
         }
         printf("\n");

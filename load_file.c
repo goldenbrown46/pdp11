@@ -1,12 +1,5 @@
 #include "lib.h"
 
-
-struct Argument  ss, dd;
-
-word w = 0;
-word NN = 0;
-
-
 void load_file(const char * file_name) {
     FILE * f = fopen(file_name, "r"); //читать из файла
     unsigned int N; //адрес_начала_блока
@@ -31,7 +24,7 @@ void mem_dump(Adress start, word n) {
 
 int main()
 {
-    load_file("./tests/01_sum/01_sum.pdp.o");
+    load_file("./tests/02_sob/02_sob.pdp.o");
     // mem_dump(0x200, 10);
     run();
 

@@ -20,7 +20,7 @@ void mov() {
 }
 
 void movb() {
-    b_write(dd.adr, ss.val & 0xFF);
+    b_write(dd.adr, ss.val);
 }
 
 void sob() {
@@ -38,6 +38,7 @@ void clr() {
 void do_unknown() {
     printf("What is this??!!\n");
     reg_dump();
+    exit(1);
 }
 
 struct Command cmd[] = {
@@ -47,7 +48,7 @@ struct Command cmd[] = {
     {0170000, 0060000, "ADD", add, HAS_SS | HAS_DD},
     {0177000, 0077000, "SOB", sob, HAS_R | HAS_N},
     {0177700, 0005000, "CLR", clr, HAS_DD},
-    {0170000, 0000000, "UNKNOWN", do_unknown, NO_PARAMS}
+    {0000000, 0000000, "UNKNOWN", do_unknown, NO_PARAMS}
 };
 
 void run()
@@ -57,7 +58,8 @@ void run()
         w = w_read(pc);
         printf("%06o : %06o ", pc, w);
         pc += 2;
-        for(size_t j = 0; j < sizeof(cmd)/sizeof(cmd[0]); j++) {
+        flag.val = w >> 15;
+        for(int j = 0; ; j++) {
             if ((w & cmd[j].mask) == cmd[j].opcode) {
                 printf("%s ", cmd[j].name);
                 if (cmd[j].params & HAS_R) {
@@ -75,8 +77,11 @@ void run()
                     printf("%06o", pc - 2 * NN);
                 }
                 cmd[j].do_command();
+                printf("\n");
+                //reg_dump();
+                break;
             }
         }
-        printf("\n");
+        
     }
 }

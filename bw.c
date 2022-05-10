@@ -12,11 +12,24 @@ void reg_dump()
 
 void b_write (Adress adr, byte b) {
 // пишем байт b по адресу adr
-    mem[adr] = b;
+    if (adr > 7) {
+        mem[adr] = b;
+    } else {
+        if (b >> 7) {
+            reg[adr] = (b & 0xff) | 0xff00;
+        }
+        else {
+            reg[adr] = b & 0xff;
+        }
+    }
 }
 byte b_read (Adress adr) {
 // читаем байт по адресу adr
-    return mem[adr];
+    if (adr < 8) {
+        return reg[adr];
+    } else {
+        return mem[adr];
+    }
 }
 void w_write (Adress adr, word w) {
 //пишем слово w по адресу adr

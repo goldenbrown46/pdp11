@@ -6,6 +6,11 @@ void load_file(const char * file_name) {
     unsigned int num; //считывать 2 числа
     unsigned int n; // число байт
 
+    if (f == NULL) {
+        perror(file_name);
+        exit(1);
+    }
+    
     while(fscanf(f, "%x%x", &N, &n) == 2) {
         for(unsigned int i = 0; i < n; i++) {
             fscanf(f, "%x", &num);
@@ -24,7 +29,7 @@ void mem_dump(Adress start, word n) {
 
 int main()
 {
-    load_file("./tests/02_sob/02_sob.pdp.o");
+    load_file("./tests/02_sob_byte/02_sob_byte.pdp.o");
     // mem_dump(0x200, 10);
     run();
 

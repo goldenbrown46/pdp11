@@ -39,6 +39,22 @@ struct Argument get_mode(word w) {
                 printf("(R%d)+ ", n);
             }
             break;
+        case 3: //-(Rn)
+            res.adr = reg[n];
+            res.adr = w_read(res.adr);
+            if (flag.val) {
+                res.val = b_read(res.adr);
+            }
+            else {
+                res.val = w_read(res.adr);
+            }
+            reg[n] += 2;
+            if (n == 7) {
+                printf("@#%06o ", res.adr);
+            } else {
+                printf("@(R%d)+ ", n);
+            }
+            break;
         default:
             fprintf(stderr, "Mode %o NOT IMPLEMENTED YET\n", mode);
             exit(1);
